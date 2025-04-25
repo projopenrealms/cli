@@ -24,7 +24,7 @@ type paperMcBuild struct {
 
 func LookupVersion(ctx context.Context, versionStr string) (Version, error) {
 	// Lookup the version from PaperMC
-	builds, err := downloadJSON[paperMcBuilds](ctx, fmt.Sprintf("https://papermc.io/api/v2/projects/paper/versions/%s/builds", versionStr))
+	builds, err := downloadJSON[paperMcBuilds](ctx, fmt.Sprintf("https://api.papermc.io/v2/projects/paper/versions/%s/builds", versionStr))
 	if err != nil {
 		return nil, fmt.Errorf("download builds list: %w", err)
 	}
