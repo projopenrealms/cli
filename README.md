@@ -1,16 +1,16 @@
-# @customrealms/cli
+# @openrealms/cli
 
-CustomRealms command-line tools for setting up and compiling JavaScript Minecraft plugins.
+OpenRealms command-line tools for setting up and compiling JavaScript Minecraft plugins.
 
 ### Installation
 
 Install the CLI on your computer:
 
 ```sh
-npm install -g @customrealms/cli
+npm install -g @openrealms/cli
 ```
 
-Then, you can use the CustomRealms CLI using the `crx` command in your terminal.
+Then, you can use the OpenRealms CLI using the `crx` command in your terminal.
 
 ### Start a project
 
