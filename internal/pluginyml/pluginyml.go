@@ -33,6 +33,8 @@ type Plugin struct {
 	LoadBefore []string `yaml:"loadbefore,flow,omitempty"`
 	// Libraries is a list of libraries your plugin needs which can be loaded from Maven Central.
 	Libraries []string `yaml:"libraries,omitempty"`
+	// Libraries is a list of libraries your plugin needs which can be loaded from Maven Central. For 1.19.2 and lower.
+	LegacyLibraries []string `yaml:"legacy-libraries,omitempty"`
 	// Commands is a map of command names to command attributes.
 	Commands map[string]Command `yaml:"commands,omitempty"`
 	// Permissions is a map of permission names to permission attributes.

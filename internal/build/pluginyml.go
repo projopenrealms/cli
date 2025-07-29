@@ -9,7 +9,7 @@ import (
 	"github.com/customrealms/cli/internal/project"
 )
 
-const JarMainClass = "io.customrealms.MainPlugin"
+const JarMainClass = "io.projopenrealms.MainPlugin"
 
 func GeneratePluginYML(project project.Project) (*pluginyml.Plugin, error) {
 	// Read the package.json file
@@ -56,6 +56,11 @@ func GeneratePluginYML(project project.Project) (*pluginyml.Plugin, error) {
 			log.Printf("Using version '%s' from plugin.yml", plugin.Version)
 		}
 	}
+
+	//Put the Nashorn Library
+	nashorn := "org.openjdk.nashorn:nashorn-core:15.6"
+	plugin.Libraries = append(plugin.Libraries, nashorn)
+	plugin.LegacyLibraries = append(plugin.LegacyLibraries, nashorn)
 
 	// Return the plugin yml
 	return plugin, nil
