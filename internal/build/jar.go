@@ -85,7 +85,7 @@ func WriteJarFile(
 	pluginSourceCode io.Reader,
 	pluginYML *pluginyml.Plugin,
 ) error {
-	fmt.Println("Generating...")
+	fmt.Println("Packaging...")
 
 	// Create the ZIP writer
 	zw := zip.NewWriter(writer)

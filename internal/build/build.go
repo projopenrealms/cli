@@ -67,8 +67,6 @@ func (a *BuildAction) Run(ctx context.Context) error {
 		return fmt.Errorf("run webpack: %w", err)
 	}
 
-	fmt.Println("Packaging Jar")
-
 	// Package the jar file
 	ja := JarAction{
 		Project:     a.Project,
