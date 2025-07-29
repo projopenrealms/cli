@@ -1,6 +1,7 @@
 // const path = require('path');
 
 module.exports = {
+    stats: "errors-warnings",
     module: {
         rules: [
             {

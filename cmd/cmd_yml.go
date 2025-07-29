@@ -11,12 +11,11 @@ import (
 
 type YmlCmd struct {
 	ProjectDir string `name:"project" short:"p" usage:"plugin project directory" optional:""`
-	McVersion  string `name:"mc" usage:"Minecraft version number target" optional:""`
 }
 
 func (c *YmlCmd) Run() error {
 	// Root context for the CLI
-	ctx, cancel := rootContext()
+	_, cancel := rootContext()
 	defer cancel()
 
 	// Default to the current working directory
@@ -24,14 +23,11 @@ func (c *YmlCmd) Run() error {
 		c.ProjectDir, _ = os.Getwd()
 	}
 
-	// Get the Minecraft version
-	minecraftVersion := mustMinecraftVersion(ctx, c.McVersion)
-
 	// Create the project
 	crProject := project.New(c.ProjectDir)
 
 	// Generate the plugin.yml file
-	pluginYML, err := build.GeneratePluginYML(crProject, minecraftVersion)
+	pluginYML, err := build.GeneratePluginYML(crProject)
 	if err != nil {
 		return fmt.Errorf("generating plugin.yml: %w", err)
 	}

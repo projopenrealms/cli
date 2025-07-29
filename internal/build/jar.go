@@ -9,24 +9,20 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/customrealms/cli/internal/minecraft"
 	"github.com/customrealms/cli/internal/pluginyml"
 	"github.com/customrealms/cli/internal/project"
 	"gopkg.in/yaml.v3"
 )
 
 type JarAction struct {
-	Project          project.Project
-	JarTemplate      JarTemplate
-	MinecraftVersion minecraft.Version
-	BundleFile       string
-	OutputFile       string
+	Project     project.Project
+	JarTemplate JarTemplate
+	BundleFile  string
+	OutputFile  string
 }
 
 func (a *JarAction) Run(ctx context.Context) error {
-	fmt.Println("============================================================")
-	fmt.Println("Downloading JAR plugin runtime")
-	fmt.Println("============================================================")
+	fmt.Println("Downloading runtime")
 
 	// Get the reader of the Jar file
 	jarReader, err := a.JarTemplate.Jar()
@@ -41,9 +37,6 @@ func (a *JarAction) Run(ctx context.Context) error {
 		return err
 	}
 
-	fmt.Println(" -> DONE")
-	fmt.Println()
-
 	// Make sure the directory above the output file exists
 	if err := os.MkdirAll(filepath.Dir(a.OutputFile), 0777); err != nil {
 		return err
@@ -52,6 +45,7 @@ func (a *JarAction) Run(ctx context.Context) error {
 	// Open the output file for the final JAR
 	file, err := os.Create(a.OutputFile)
 	if err != nil {
+		fmt.Println("Couldn't find output file during the bundling process, check the error below. Directory: '" + a.OutputFile + "'")
 		return err
 	}
 	defer file.Close()
@@ -64,7 +58,7 @@ func (a *JarAction) Run(ctx context.Context) error {
 	defer pluginCode.Close()
 
 	// Generate the plugin.yml file for the project
-	pluginYML, err := GeneratePluginYML(a.Project, a.MinecraftVersion)
+	pluginYML, err := GeneratePluginYML(a.Project)
 	if err != nil {
 		return fmt.Errorf("generating plugin.yml: %w", err)
 	}
@@ -79,7 +73,7 @@ func (a *JarAction) Run(ctx context.Context) error {
 		return err
 	}
 
-	fmt.Println("Wrote JAR file to: ", a.OutputFile)
+	fmt.Println("Plugin Destination:", a.OutputFile)
 
 	return nil
 
@@ -91,10 +85,7 @@ func WriteJarFile(
 	pluginSourceCode io.Reader,
 	pluginYML *pluginyml.Plugin,
 ) error {
-
-	fmt.Println("============================================================")
-	fmt.Println("Generating final JAR file for your plugin")
-	fmt.Println("============================================================")
+	fmt.Println("Generating...")
 
 	// Create the ZIP writer
 	zw := zip.NewWriter(writer)
@@ -106,8 +97,6 @@ func WriteJarFile(
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(" -> Copying template files to new JAR file")
 
 	// Copy all the files back to the jar file
 	for _, f := range zr.File {
@@ -124,8 +113,6 @@ func WriteJarFile(
 
 	}
 
-	fmt.Println(" -> Writing bundle JS code to JAR file")
-
 	// Write the plugin code to the jar
 	codeFile, err := zw.Create("plugin.js")
 	if err != nil {
@@ -134,8 +121,6 @@ func WriteJarFile(
 	if _, err := io.Copy(codeFile, pluginSourceCode); err != nil {
 		return err
 	}
-
-	fmt.Println(" -> Writing plugin.yml file to JAR file")
 
 	// Write the plugin YML file to the jar
 	ymlFile, err := zw.Create("plugin.yml")
@@ -147,9 +132,6 @@ func WriteJarFile(
 	if err := enc.Encode(pluginYML); err != nil {
 		return fmt.Errorf("encoding plugin.yml: %w", err)
 	}
-
-	fmt.Println(" -> DONE")
-	fmt.Println()
 
 	// We're done, no errors
 	return nil

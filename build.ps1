@@ -1,6 +1,6 @@
 $version = "v1"
 $name = "customrealms-cli"
-$main = "./cmd/"
+$main = "./cmd"
 
 $targets = @(
   @{ OS = "windows"; ARCH = "amd64" },
@@ -20,7 +20,7 @@ foreach ($target in $targets) {
   $binary = if ($os -eq "windows") { "crx.exe" } else { "crx" }
 
   New-Item -ItemType Directory -Force -Path $folder | Out-Null
-  Write-Host "→ Building $os/$arch → $folder\$binary"
+  Write-Host "Building $os/$arch - $folder\$binary"
 
   $env:GOOS = $os
   $env:GOARCH = $arch
