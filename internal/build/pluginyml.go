@@ -57,10 +57,9 @@ func GeneratePluginYML(project project.Project) (*pluginyml.Plugin, error) {
 		}
 	}
 
-	//Put the Nashorn Library
-	nashorn := "org.openjdk.nashorn:nashorn-core:15.6"
-	plugin.Libraries = append(plugin.Libraries, nashorn)
-	plugin.LegacyLibraries = append(plugin.LegacyLibraries, nashorn)
+	//Put the GraalJS Libraries
+	plugin.Libraries = append(plugin.Libraries, "org.graalvm.js:js-language:24.2.2", "org.graalvm.truffle:truffle-runtime:24.2.2")
+	plugin.LegacyLibraries = append(plugin.LegacyLibraries, "org.graalvm.js:js-language:24.2.2", "org.graalvm.truffle:truffle-runtime:24.2.2")
 
 	// Return the plugin yml
 	return plugin, nil
